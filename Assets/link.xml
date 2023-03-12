@@ -1,0 +1,6 @@
+﻿<linker>
+    <assembly fullname="UnityEngine.CoreModule">
+        <type fullname="UnityEngine.CoreModule.Vector3" preserve="all"/>
+        <type fullname="UnityEngine.CoreModule.Color" preserve="all"/>
+    </assembly>
+</linker>

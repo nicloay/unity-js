@@ -1,0 +1,16 @@
+{
+  "name": "JSContainer",
+  "rootNamespace": "JSContainer",
+  "references": [
+    "GUID:f7d4d4ebcb7e2bd41b618d644d15e64b"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

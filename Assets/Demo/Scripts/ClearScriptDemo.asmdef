@@ -1,0 +1,17 @@
+{
+  "name": "ClearScriptDemo",
+  "rootNamespace": "ClearScriptDemo",
+  "references": [
+    "GUID:b4f8449d8c304c24f936ccc1dcbe461b",
+    "GUID:f51ebe6a0ceec4240a699833d6309b23"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
