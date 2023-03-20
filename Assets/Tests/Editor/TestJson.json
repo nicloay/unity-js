@@ -1,0 +1,32 @@
+﻿[
+  {
+    "method": "entity_transform_update",
+    "data": {
+      "entityId": 12,
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      }
+    }
+  },
+  {
+    "method": "entity_add",
+    "data": {
+      "id": 12
+    }
+  }
+]
