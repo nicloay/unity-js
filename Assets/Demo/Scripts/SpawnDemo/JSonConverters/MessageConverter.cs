@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ClearScriptDemo.Demo.ECS;
+using ClearScriptDemo.Demo.SpawnDemo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

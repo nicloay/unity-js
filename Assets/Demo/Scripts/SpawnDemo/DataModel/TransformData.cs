@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace ClearScriptDemo.Demo.ECS
+namespace ClearScriptDemo.Demo.SpawnDemo
 {
     [JsonConverter(typeof(TransformDataConverter))]
     public class TransformData

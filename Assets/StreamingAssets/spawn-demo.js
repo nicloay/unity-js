@@ -9,12 +9,16 @@ const incoming = []
 const outgoing = []
 
 async function sendReceive() {
-  // Exchange serialized messages:
-  const newIncoming = await engine.sendMessages(outgoing.map(encode)).map(decode)
+  // Exchange serialized messages
+  
+  const newIncoming = await engine.sendMessages(outgoing.map(encode)) //.map(decode)
   
   // Place incoming messages in the queue, and clear the outgoing messages we just sent:
-  incoming = incoming.concat(newIncoming)
-  outgoing = []
+  // incoming = incoming.concat(newIncoming)
+  // outgoing = []
+
+  incoming.push(...newIncoming);
+  outgoing.length = 0;
 }
 
 // The known ID of the only Entity in this example:

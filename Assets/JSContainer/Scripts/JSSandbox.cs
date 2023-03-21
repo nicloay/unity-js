@@ -54,19 +54,28 @@ namespace JSContainer
 
             // 4. Load Custom Interop Objects which can be used as CommonJS modules
             _engine.DocumentSettings.AccessFlags = DocumentAccessFlags.EnableFileLoading;
-            _ioModulesByName =
-                LoadIOModules(); // FUTURE_TASK: it's possible to reuse the same list for multiple containers
-            var modules = ApplyOverrides(_ioModulesByName, moduleOverrides);
-            modules = ExcludeObjectOverrides(modules, objectsOverride);
+            _ioModulesByName =  LoadIOModules(); // FUTURE_TASK: it's possible to reuse the same list for multiple containers
+            var modules = _ioModulesByName;
+            if (moduleOverrides != null)
+            {
+                modules = ApplyOverrides(_ioModulesByName, moduleOverrides);
+            }
+            if (objectsOverride != null)
+            {
+                modules = ExcludeObjectOverrides(modules, objectsOverride);
+            }
             foreach (var keyValuePair in modules) Include(keyValuePair.Key);
             AddInstancesToCache(objectsOverride);
         }
 
         private void AddInstancesToCache(IReadOnlyDictionary<string,object> objectsOverride)
         {
+            if (objectsOverride == null) 
+                return;
             foreach (var keyValuePair in objectsOverride)
             {
                 _globalModuleInstances.Add(keyValuePair.Key, keyValuePair.Value);
+                Include(keyValuePair.Key);
             }
         }
 
