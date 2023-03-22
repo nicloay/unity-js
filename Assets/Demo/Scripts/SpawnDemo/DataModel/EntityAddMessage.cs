@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ClearScriptDemo.Demo.SpawnDemo
 {
+    [MessageId("entity_add")]
     public class EntityAddMessage : IJSMessage
     {
         public int Id { get; set; }

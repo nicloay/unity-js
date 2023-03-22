@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using ClearScriptDemo.SpawnDemo;
+using UnityEngine;
 
 namespace ClearScriptDemo.Demo.SpawnDemo
 {
+    [MessageId("entity_transform_update")]
     public class EntityTransformUpdateMessage : IJSMessage
     {
         public int EntityId { get; set; }
@@ -12,7 +14,10 @@ namespace ClearScriptDemo.Demo.SpawnDemo
     {
         public static void Handle(this EntityTransformUpdateMessage message)
         {
-            Debug.LogError("Not implemented yet");
+            var entity = Entities.GetById(message.EntityId);
+            entity.transform.position = message.Transform.Position;
+            entity.transform.rotation = Quaternion.Euler(message.Transform.Rotation);
+            entity.transform.localScale = message.Transform.Scale;
         }
     }
 }

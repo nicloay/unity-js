@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using ClearScriptDemo.Demo.SpawnDemo;
 using ClearScriptDemo.JSonConverters;
 using JSContainer;
@@ -13,22 +12,31 @@ namespace ClearScriptDemo.SpawnDemo
 {
     public class SpawnDemoRunner : MonoBehaviour
     {
-        private Dictionary<int, GameObject> _entitiesById = new Dictionary<int, GameObject>();
-        
         private const string JS_FILE_NAME = "spawn-demo.js";
+
+        private readonly MessageConverter _converter = new();
+        private Dictionary<int, GameObject> _entitiesById = new();
         private dynamic _module;
         private JSSandbox _sandbox;
 
         private async void Awake()
         {
-            _sandbox = new JSSandbox(objectsOverride: new Dictionary<string, object>{{"~engine", this}});
+            _sandbox = new JSSandbox(objectsOverride: new Dictionary<string, object> { { "~engine", this } });
             _sandbox.Script.sendMessages = new Func<object[], object[]>(sendMessages);
             _module = _sandbox.EvaluateCommonJSModule(Path.Combine(Application.streamingAssetsPath, JS_FILE_NAME));
 
             await _module.onStart();
         }
 
-        private readonly MessageConverter _converter = new();
+        private void OnDestroy()
+        {
+            _sandbox.Dispose();
+        }
+
+        private void Update()
+        {
+            _module.onUpdate(Time.deltaTime);
+        }
 
         public object[] sendMessages(IList messages)
         {
@@ -40,11 +48,5 @@ namespace ClearScriptDemo.SpawnDemo
 
             return new string[0];
         }
-
-        private void OnDestroy()
-        {
-            _sandbox.Dispose();
-        }
     }
-    
 }

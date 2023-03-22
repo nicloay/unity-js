@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using ClearScriptDemo.Demo.SpawnDemo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -9,11 +10,29 @@ namespace ClearScriptDemo.JSonConverters
 {
     public class MessageConverter : JsonConverter
     {
-        private static readonly Dictionary<string, Type> JSON_MAP = new()
+        private readonly Dictionary<string, Type> _messageTypeById;
+
+        public MessageConverter()
         {
-            { "entity_transform_update", typeof(EntityTransformUpdateMessage) },
-            { "entity_add", typeof(EntityAddMessage) }
-        };
+            _messageTypeById = GetJsonMap();
+        }
+
+        private Dictionary<string,Type> GetJsonMap()
+        {
+            var result = new Dictionary<string, Type>();
+            var allTypes = GetType().Assembly.GetTypes();
+
+            var attribute = typeof(MessageIdAttribute);
+            foreach (var type in allTypes)
+            {
+                if (Attribute.IsDefined(type, attribute))
+                {
+                    var a = type.GetCustomAttribute<MessageIdAttribute>();
+                    result.Add(a.MessageId, type);
+                }
+            }
+            return result;
+        }
 
 
         public override bool CanConvert(Type objectType)
@@ -28,9 +47,9 @@ namespace ClearScriptDemo.JSonConverters
             var typeName = (string)jObject["method"];
             var data = jObject["data"];
 
-            if (!JSON_MAP.ContainsKey(typeName!)) throw new JsonSerializationException("Unknown message: " + typeName);
+            if (!_messageTypeById.ContainsKey(typeName!)) throw new JsonSerializationException("Unknown message: " + typeName);
 
-            var type = JSON_MAP[typeName];
+            var type = _messageTypeById[typeName];
             if (data == null) return Activator.CreateInstance(type);
 
             return data.ToObject(type, serializer);
