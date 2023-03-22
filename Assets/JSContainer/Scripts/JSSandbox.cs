@@ -40,7 +40,7 @@ namespace JSContainer
         public JSSandbox(IReadOnlyDictionary<string, Type> moduleOverrides = null, IReadOnlyDictionary<string, object> objectsOverride = null)
         {
             _engine = new V8ScriptEngine(V8ScriptEngineFlags.EnableTaskPromiseConversion);
-
+            
             // 1. Add internal method
             _engine.Script.JSContainerLazyLoadModule = new Func<string, object>(LazyLoadModule);
 

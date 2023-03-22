@@ -2,9 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
+using ClearScriptDemo.Demo.Scripts.SpawnDemo.Components;
 using ClearScriptDemo.Demo.SpawnDemo;
 using ClearScriptDemo.JSonConverters;
 using JSContainer;
+using Microsoft.ClearScript.JavaScript;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -13,7 +16,7 @@ namespace ClearScriptDemo.SpawnDemo
     public class SpawnDemoRunner : MonoBehaviour
     {
         private const string JS_FILE_NAME = "spawn-demo.js";
-
+        private readonly MessageQueue _messageQueue = new();
         private readonly MessageConverter _converter = new();
         private Dictionary<int, GameObject> _entitiesById = new();
         private dynamic _module;
@@ -21,10 +24,11 @@ namespace ClearScriptDemo.SpawnDemo
 
         private async void Awake()
         {
+            KeyDownUpInputDispatcher.Instantiate(gameObject, _messageQueue);
             _sandbox = new JSSandbox(objectsOverride: new Dictionary<string, object> { { "~engine", this } });
-            _sandbox.Script.sendMessages = new Func<object[], object[]>(sendMessages);
+            _sandbox.Script.sendMessages = new Func<IList, object>(sendMessages);
             _module = _sandbox.EvaluateCommonJSModule(Path.Combine(Application.streamingAssetsPath, JS_FILE_NAME));
-
+            CallModuleUpdate.Instantiate(gameObject, _module);
             await _module.onStart();
         }
 
@@ -33,20 +37,15 @@ namespace ClearScriptDemo.SpawnDemo
             _sandbox.Dispose();
         }
 
-        private void Update()
-        {
-            _module.onUpdate(Time.deltaTime);
-        }
-
-        public object[] sendMessages(IList messages)
+        public async Task<object> sendMessages(IList messages)
         {
             foreach (var message in messages)
             {
-                var data = JsonConvert.DeserializeObject<IJSMessage>((string)message, _converter);
+                var data = JsonConvert.DeserializeObject<IMessage>((string)message, _converter);
                 MessageHandler.HandleMessage(data);
             }
 
-            return new string[0];
+            return _sandbox.Script.Array.from(_messageQueue.PopMessagesAsStringList());
         }
     }
 }

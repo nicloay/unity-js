@@ -14,7 +14,7 @@ namespace Tests
         {
             MessageConverter converter = new();
             var json = File.ReadAllText("Assets/Tests/Editor/TestJson.json");
-            var data = JsonConvert.DeserializeObject<IJSMessage[]>(json, converter);
+            var data = JsonConvert.DeserializeObject<IMessage[]>(json, converter);
 
             Assert.That(data.Length, Is.EqualTo(2));
             Assert.That(data[0], Is.TypeOf<EntityAddMessage>());
@@ -36,7 +36,7 @@ namespace Tests
             var data = new TransformData
             {
                 Position = new Vector3(1.0f, 2.0f, 3.0f),
-                Rotation = new Vector4(0.0f, 0.0f, 0.0f, 1.0f),
+                Rotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f),
                 Scale = new Vector3(2.0f, 2.0f, 2.0f)
             };
 
@@ -56,7 +56,7 @@ namespace Tests
                 Transform = new TransformData
                 {
                     Position = new Vector3(1, 2, 3),
-                    Rotation = new Vector4(0, 0, 0, 1),
+                    Rotation = new Quaternion(0, 0, 0, 1),
                     Scale = new Vector3(2, 2, 2)
                 }
             };

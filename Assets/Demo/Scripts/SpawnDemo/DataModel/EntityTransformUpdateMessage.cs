@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ClearScriptDemo.Demo.SpawnDemo
 {
     [MessageId("entity_transform_update")]
-    public class EntityTransformUpdateMessage : IJSMessage
+    public class EntityTransformUpdateMessage : IMessage
     {
         public int EntityId { get; set; }
         public TransformData Transform { get; set; }
@@ -16,7 +16,7 @@ namespace ClearScriptDemo.Demo.SpawnDemo
         {
             var entity = Entities.GetById(message.EntityId);
             entity.transform.position = message.Transform.Position;
-            entity.transform.rotation = Quaternion.Euler(message.Transform.Rotation);
+            entity.transform.rotation = message.Transform.Rotation;
             entity.transform.localScale = message.Transform.Scale;
         }
     }

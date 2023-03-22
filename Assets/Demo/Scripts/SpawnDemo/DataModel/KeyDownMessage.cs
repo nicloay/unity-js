@@ -1,8 +1,8 @@
 ﻿namespace ClearScriptDemo.Demo.SpawnDemo
 {
     [MessageId("key_down")]
-    public class KeyDownMessage : IJSMessage
+    public class KeyDownMessage : IMessage
     {
-        public string Key;
+        public string Key { get; set; }
     }
 }

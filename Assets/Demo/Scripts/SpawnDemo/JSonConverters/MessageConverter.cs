@@ -10,6 +10,7 @@ using UnityEngine;
 // ReSharper disable once CheckNamespace
 namespace ClearScriptDemo.JSonConverters
 {
+    
     public class MessageConverter : JsonConverter
     {
         private static readonly IReadOnlyDictionary<string, Type> MESSAGE_TYPE_BY_ID;
@@ -40,7 +41,7 @@ namespace ClearScriptDemo.JSonConverters
 
         public override bool CanConvert(Type objectType)
         {
-            return typeof(IJSMessage).IsAssignableFrom(objectType);
+            return typeof(IMessage).IsAssignableFrom(objectType);
         }
         
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,

@@ -5,9 +5,9 @@ namespace ClearScriptDemo.Demo.SpawnDemo
 {
     public static class MessageHandler
     {
-        public static void HandleMessage(IJSMessage jsMessage)
+        public static void HandleMessage(IMessage message)
         {
-            switch (jsMessage)
+            switch (message)
             {
                 case EntityAddMessage addMessage:
                     addMessage.Handle();
@@ -16,7 +16,7 @@ namespace ClearScriptDemo.Demo.SpawnDemo
                     transformMessage.Handle();
                     break;
                 default:
-                    throw new NotSupportedException($"NotSupported message [{jsMessage}]");
+                    throw new NotSupportedException($"NotSupported message [{message}]");
             }
         }
     }

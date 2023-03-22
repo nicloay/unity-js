@@ -10,12 +10,11 @@ const outgoing = []
 
 async function sendReceive() {
   // Exchange serialized messages
-  
-  const newIncoming = await engine.sendMessages(outgoing.map(encode)) //.map(decode)
+  var result = await engine.sendMessages(outgoing.map(encode))
+  const newIncoming = result.map(decode)
   
   // Place incoming messages in the queue, and clear the outgoing messages we just sent:
   // incoming = incoming.concat(newIncoming)
-  // outgoing = []
 
   incoming.push(...newIncoming);
   outgoing.length = 0;
@@ -49,18 +48,22 @@ module.exports.onStart = async function() {
 }
 
 module.exports.onUpdate = async function(dt) {
+  
   // Process incoming messages:
   for (msg of incoming) {
+    console.log(msg.method)
+    console.log(JSON.stringify(msg))
     if (msg.method === "key_down" && msg.data.key === "space") {
+      console.log("space down")
       isSpaceBarPressed = true
     }
     if (msg.method === "key_up" && msg.data.key === "space") {
+      console.log("space up")
       isSpaceBarPressed = false
     }
   }
   // Clear queue
-  incoming = [];
-  
+  incoming.length = [];
   /**
    * Pressing the space bar makes the cube grow bigger.
    * If it's released, it shrinks back to its original size.
@@ -82,7 +85,7 @@ module.exports.onUpdate = async function(dt) {
       entityId: cubeId,
       transform: {
         position: [0, 0, 0],
-        rotation: [rotationX, 0, 0, 0],
+        rotation: [Math.sin(rotationX), 0, 0, Math.cos(rotationX)],
         scale: [1, scaleY, 1]
       }
     }

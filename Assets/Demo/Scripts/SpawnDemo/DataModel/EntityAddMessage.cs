@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ClearScriptDemo.Demo.SpawnDemo
 {
     [MessageId("entity_add")]
-    public class EntityAddMessage : IJSMessage
+    public class EntityAddMessage : IMessage
     {
         public int Id { get; set; }
     }
