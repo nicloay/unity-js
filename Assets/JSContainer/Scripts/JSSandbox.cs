@@ -16,9 +16,9 @@ namespace JSContainer
     /// </summary>
     public class JSSandbox : IDisposable
     {
-        private static readonly Type InteropAttribute = typeof(InteropModule);
+        private static readonly Type INTEROP_ATTRIBUTE = typeof(InteropModule);
 
-        private static readonly HashSet<Type> ExposedTypes = new()
+        private static readonly HashSet<Type> EXPOSED_TYPES = new()
         {
             typeof(Vector3), typeof(Color)
         };
@@ -55,7 +55,7 @@ namespace JSContainer
 
             // 2. Expose UnityEngine types see ExposedTypes
             var collection = new HostTypeCollection();
-            collection.AddAssembly(typeof(Vector3).Assembly, ExposedTypes.Contains);
+            collection.AddAssembly(typeof(Vector3).Assembly, EXPOSED_TYPES.Contains);
             _engine.AddHostObject("unity", collection);
 
             // 4. Load Custom Interop Objects which can be used as CommonJS modules
@@ -140,13 +140,13 @@ namespace JSContainer
             var result = new Dictionary<string, Type>();
             var assembly = typeof(InteropModule).Assembly;
             foreach (var type in assembly.GetTypes())
-                if (Attribute.IsDefined(type, InteropAttribute))
+                if (Attribute.IsDefined(type, INTEROP_ATTRIBUTE))
                 {
-                    var attribute = (InteropModule)Attribute.GetCustomAttribute(type, InteropAttribute);
-                    if (result.ContainsKey(attribute.ItemName))
+                    var attribute = (InteropModule)Attribute.GetCustomAttribute(type, INTEROP_ATTRIBUTE);
+                    if (result.TryGetValue(attribute.ItemName, out var value))
                     {
                         Debug.LogError($"problem with multiple module with the same itemName: {attribute.ItemName} " +
-                                       $"types: {result[attribute.ItemName]}, {type}");
+                                       $"types: {value}, {type}");
                         throw new Exception();
                     }
 

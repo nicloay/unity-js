@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Tests
+namespace EditorTests
 {
     public class TestJson
     {

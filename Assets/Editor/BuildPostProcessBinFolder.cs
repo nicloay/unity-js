@@ -2,6 +2,7 @@ using System.IO;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 
+// ReSharper disable once CheckNamespace
 namespace ClearScriptUnityDemo
 {
     /// <summary>

@@ -13,18 +13,16 @@ namespace ClearScriptDemo.JSonConverters
     public class MessageConverter : JsonConverter
     {
         private static readonly IReadOnlyDictionary<string, Type> MESSAGE_TYPE_BY_ID;
-        private static readonly IReadOnlyDictionary<Type, string> ID_BY_MESSAGE_TYPE;
         private static readonly Type MESSAGE_ID_ATTRIBUTE = typeof(MessageIdAttribute);
 
         static MessageConverter()
         {
-            (MESSAGE_TYPE_BY_ID, ID_BY_MESSAGE_TYPE) = GetJsonMap();
+            MESSAGE_TYPE_BY_ID = GetJsonMap();
         }
 
-        private static (Dictionary<string, Type>, Dictionary<Type, string>) GetJsonMap()
+        private static Dictionary<string, Type> GetJsonMap()
         {
             var typeById = new Dictionary<string, Type>();
-            var idByType = new Dictionary<Type, string>();
             var allTypes = typeof(MessageConverter).Assembly.GetTypes();
 
             foreach (var type in allTypes)
@@ -34,7 +32,7 @@ namespace ClearScriptDemo.JSonConverters
                     typeById.Add(a.MessageId, type);
                 }
 
-            return (typeById, idByType);
+            return typeById;
         }
 
 
@@ -86,6 +84,7 @@ namespace ClearScriptDemo.JSonConverters
             }
 
 
+            // ReSharper disable once CoVariantArrayConversion
             var dataObj = new JObject(dataProps.ToArray());
             var messageObj = new JObject(
                 new JProperty("method", messageId),

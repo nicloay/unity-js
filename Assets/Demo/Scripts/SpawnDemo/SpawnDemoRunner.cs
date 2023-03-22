@@ -25,8 +25,9 @@ namespace ClearScriptDemo.Demo.SpawnDemo
             _sandbox.Script.sendMessages = new Func<IList, object>(sendMessages);
             _module = _sandbox.EvaluateCommonJSModule(Path.Combine(Application.streamingAssetsPath, JS_FILE_NAME));
             await _module.onStart();
-            CallModuleUpdate.Instantiate(gameObject, _module);
-            KeyDownUpInputDispatcher.Instantiate(gameObject, _messageQueue);
+            var o = gameObject;
+            CallModuleUpdate.Instantiate(o, _module);
+            KeyDownUpInputDispatcher.Instantiate(o, _messageQueue);
         }
 
         private void OnDestroy()
@@ -36,6 +37,7 @@ namespace ClearScriptDemo.Demo.SpawnDemo
 
 #pragma warning disable CS1998
         // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable once InconsistentNaming
         public async Task<object> sendMessages(IList messages)
 #pragma warning restore CS1998
         {
