@@ -12,7 +12,6 @@ namespace ClearScriptDemo.Demo.SpawnDemo
     public class MessageQueue
     {
         private readonly List<IMessage> _messages = new();
-        public bool IsNotEmpty => _messages.Count > 0;
 
         public void AddMessage(IMessage message)
         {

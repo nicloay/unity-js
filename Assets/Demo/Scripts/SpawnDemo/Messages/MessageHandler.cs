@@ -1,18 +1,21 @@
 ﻿using System;
+using ClearScriptDemo.Demo.SpawnDemo.Utils;
 
 namespace ClearScriptDemo.Demo.SpawnDemo
 {
-    public static class MessageHandler
+    public class MessageHandler
     {
-        public static void HandleMessage(IMessage message)
+        private readonly EntityManager _entityManager = new();
+
+        public void HandleMessage(IMessage message)
         {
             switch (message)
             {
                 case EntityAddMessage addMessage:
-                    addMessage.Handle();
+                    addMessage.Handle(_entityManager);
                     break;
                 case EntityTransformUpdateMessage transformMessage:
-                    transformMessage.Handle();
+                    transformMessage.Handle(_entityManager);
                     break;
                 default:
                     throw new NotSupportedException($"NotSupported message [{message}]");

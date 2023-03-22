@@ -11,9 +11,9 @@ namespace ClearScriptDemo.Demo.SpawnDemo
 
     public static class EntityTransformUpdateHandler
     {
-        public static void Handle(this EntityTransformUpdateMessage message)
+        public static void Handle(this EntityTransformUpdateMessage message, EntityManager entityManager)
         {
-            var entity = Entities.GetById(message.EntityId);
+            var entity = entityManager.GetById(message.EntityId);
             entity.transform.position = message.Transform.Position;
             entity.transform.rotation = message.Transform.Rotation;
             entity.transform.localScale = message.Transform.Scale;

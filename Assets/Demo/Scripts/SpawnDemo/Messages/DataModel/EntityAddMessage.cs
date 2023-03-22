@@ -13,9 +13,9 @@ namespace ClearScriptDemo.Demo.SpawnDemo
 
     public static class AddMessageHandler
     {
-        public static void Handle(this EntityAddMessage message)
+        public static void Handle(this EntityAddMessage message, EntityManager entityManager)
         {
-            Entities.InstantiatePrimitive(message.Id, PrimitiveType.Cube);
+            entityManager.InstantiatePrimitive(message.Id, PrimitiveType.Cube);
         }
     }
 }

@@ -13,20 +13,20 @@ namespace ClearScriptDemo.Demo.SpawnDemo
     public class SpawnDemoRunner : MonoBehaviour
     {
         private const string JS_FILE_NAME = "spawn-demo.js";
+        private readonly MessageHandler _messageHandler = new();
         private readonly MessageQueue _messageQueue = new();
 
-        private Dictionary<int, GameObject> _entitiesById = new();
         private dynamic _module;
         private JSSandbox _sandbox;
 
         private async void Awake()
         {
-            KeyDownUpInputDispatcher.Instantiate(gameObject, _messageQueue);
             _sandbox = new JSSandbox(objectsOverride: new Dictionary<string, object> { { "~engine", this } });
             _sandbox.Script.sendMessages = new Func<IList, object>(sendMessages);
             _module = _sandbox.EvaluateCommonJSModule(Path.Combine(Application.streamingAssetsPath, JS_FILE_NAME));
-            CallModuleUpdate.Instantiate(gameObject, _module);
             await _module.onStart();
+            CallModuleUpdate.Instantiate(gameObject, _module);
+            KeyDownUpInputDispatcher.Instantiate(gameObject, _messageQueue);
         }
 
         private void OnDestroy()
@@ -34,12 +34,15 @@ namespace ClearScriptDemo.Demo.SpawnDemo
             _sandbox.Dispose();
         }
 
+#pragma warning disable CS1998
+        // ReSharper disable once MemberCanBePrivate.Global
         public async Task<object> sendMessages(IList messages)
+#pragma warning restore CS1998
         {
             foreach (var message in messages)
             {
                 var data = ((string)message).ToMessage();
-                MessageHandler.HandleMessage(data);
+                _messageHandler.HandleMessage(data);
             }
 
             return _sandbox.Script.Array.from(_messageQueue.PopMessagesAsStringList());

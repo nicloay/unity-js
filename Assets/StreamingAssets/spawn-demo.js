@@ -51,14 +51,10 @@ module.exports.onUpdate = async function(dt) {
   
   // Process incoming messages:
   for (msg of incoming) {
-    console.log(msg.method)
-    console.log(JSON.stringify(msg))
     if (msg.method === "key_down" && msg.data.key === "space") {
-      console.log("space down")
       isSpaceBarPressed = true
     }
     if (msg.method === "key_up" && msg.data.key === "space") {
-      console.log("space up")
       isSpaceBarPressed = false
     }
   }
