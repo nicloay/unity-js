@@ -10,7 +10,6 @@ using UnityEngine;
 // ReSharper disable once CheckNamespace
 namespace ClearScriptDemo.JSonConverters
 {
-    
     public class MessageConverter : JsonConverter
     {
         private static readonly IReadOnlyDictionary<string, Type> MESSAGE_TYPE_BY_ID;
@@ -43,7 +42,7 @@ namespace ClearScriptDemo.JSonConverters
         {
             return typeof(IMessage).IsAssignableFrom(objectType);
         }
-        
+
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer)
         {
@@ -53,13 +52,10 @@ namespace ClearScriptDemo.JSonConverters
 
             if (!MESSAGE_TYPE_BY_ID.ContainsKey(typeName!))
                 throw new JsonSerializationException("Unknown message: " + typeName);
-            
+
             var type = MESSAGE_TYPE_BY_ID[typeName];
             var result = Activator.CreateInstance(type);
-            if (data != null)
-            {
-                serializer.Populate(data.CreateReader(), result);
-            }
+            if (data != null) serializer.Populate(data.CreateReader(), result);
 
             return result;
         }
