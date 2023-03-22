@@ -19,11 +19,15 @@ namespace ClearScriptDemo.Demo.SpawnDemo
         private dynamic _module;
         private JSSandbox _sandbox;
 
-        private async void Awake()
+        private void Awake()
         {
             _sandbox = new JSSandbox(objectsOverride: new Dictionary<string, object> { { "~engine", this } });
             _sandbox.Script.sendMessages = new Func<IList, object>(sendMessages);
             _module = _sandbox.EvaluateCommonJSModule(Path.Combine(Application.streamingAssetsPath, JS_FILE_NAME));
+        }
+
+        private async void Start()
+        {
             await _module.onStart();
             var o = gameObject;
             CallModuleUpdate.Instantiate(o, _module);
