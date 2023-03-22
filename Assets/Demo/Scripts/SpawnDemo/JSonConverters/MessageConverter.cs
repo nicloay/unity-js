@@ -2,42 +2,45 @@
 using System.Collections.Generic;
 using System.Reflection;
 using ClearScriptDemo.Demo.SpawnDemo;
+using ClearScriptDemo.Demo.SpawnDemo.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 namespace ClearScriptDemo.JSonConverters
 {
     public class MessageConverter : JsonConverter
     {
-        private readonly Dictionary<string, Type> _messageTypeById;
+        private static readonly IReadOnlyDictionary<string, Type> MESSAGE_TYPE_BY_ID;
+        private static readonly IReadOnlyDictionary<Type, string> ID_BY_MESSAGE_TYPE;
+        private static readonly Type MESSAGE_ID_ATTRIBUTE = typeof(MessageIdAttribute);
 
-        public MessageConverter()
+        static MessageConverter()
         {
-            _messageTypeById = GetJsonMap();
+            (MESSAGE_TYPE_BY_ID, ID_BY_MESSAGE_TYPE) = GetJsonMap();
         }
 
-        private Dictionary<string,Type> GetJsonMap()
+        private static (Dictionary<string, Type>, Dictionary<Type, string>) GetJsonMap()
         {
-            var result = new Dictionary<string, Type>();
-            var allTypes = GetType().Assembly.GetTypes();
+            var typeById = new Dictionary<string, Type>();
+            var idByType = new Dictionary<Type, string>();
+            var allTypes = typeof(MessageConverter).Assembly.GetTypes();
 
-            var attribute = typeof(MessageIdAttribute);
             foreach (var type in allTypes)
-            {
-                if (Attribute.IsDefined(type, attribute))
+                if (Attribute.IsDefined(type, MESSAGE_ID_ATTRIBUTE))
                 {
                     var a = type.GetCustomAttribute<MessageIdAttribute>();
-                    result.Add(a.MessageId, type);
+                    typeById.Add(a.MessageId, type);
                 }
-            }
-            return result;
+
+            return (typeById, idByType);
         }
 
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType.IsAssignableFrom(typeof(IJSMessage));
+            return typeof(IJSMessage).IsAssignableFrom(objectType);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
@@ -47,9 +50,10 @@ namespace ClearScriptDemo.JSonConverters
             var typeName = (string)jObject["method"];
             var data = jObject["data"];
 
-            if (!_messageTypeById.ContainsKey(typeName!)) throw new JsonSerializationException("Unknown message: " + typeName);
+            if (!MESSAGE_TYPE_BY_ID.ContainsKey(typeName!))
+                throw new JsonSerializationException("Unknown message: " + typeName);
 
-            var type = _messageTypeById[typeName];
+            var type = MESSAGE_TYPE_BY_ID[typeName];
             if (data == null) return Activator.CreateInstance(type);
 
             return data.ToObject(type, serializer);
@@ -57,7 +61,36 @@ namespace ClearScriptDemo.JSonConverters
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            var type = value.GetType();
+            if (!Attribute.IsDefined(type, MESSAGE_ID_ATTRIBUTE))
+            {
+                Debug.LogError($"attribute {nameof(MessageIdAttribute)} is not presented at {type}");
+                throw new Exception();
+            }
+
+            var messageId = type.GetCustomAttribute<MessageIdAttribute>().MessageId;
+
+            var messageProps = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var dataProps = new List<JProperty>();
+
+
+            foreach (var prop in messageProps)
+            {
+                var propValue = prop.GetValue(value);
+                if (propValue != null)
+                {
+                    var propJson = new JProperty(prop.Name.ToCamelCase(), JToken.FromObject(propValue));
+                    dataProps.Add(propJson);
+                }
+            }
+
+
+            var dataObj = new JObject(dataProps.ToArray());
+            var messageObj = new JObject(
+                new JProperty("method", messageId),
+                new JProperty("data", dataObj));
+
+            messageObj.WriteTo(writer);
         }
     }
 }

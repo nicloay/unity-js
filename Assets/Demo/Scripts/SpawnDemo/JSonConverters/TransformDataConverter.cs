@@ -1,14 +1,13 @@
 ﻿using System;
-using ClearScriptDemo.Demo.SpawnDemo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
-namespace ClearScriptDemo.Demo.ECS.JSonConverters
+namespace ClearScriptDemo.Demo.SpawnDemo.JSonConverters
 {
     public class TransformDataConverter : JsonConverter<TransformData>
     {
-        public override bool CanWrite => false;
+        public override bool CanWrite => true;
 
         public override TransformData ReadJson(JsonReader reader, Type objectType, TransformData existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
@@ -29,10 +28,30 @@ namespace ClearScriptDemo.Demo.ECS.JSonConverters
                 Scale = scale
             };
         }
-
+        
         public override void WriteJson(JsonWriter writer, TransformData value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            writer.WriteStartObject();
+            writer.WritePropertyName("position");
+            writer.WriteStartArray();
+            writer.WriteValue(value.Position.x);
+            writer.WriteValue(value.Position.y);
+            writer.WriteValue(value.Position.z);
+            writer.WriteEndArray();
+            writer.WritePropertyName("rotation");
+            writer.WriteStartArray();
+            writer.WriteValue(value.Rotation.x);
+            writer.WriteValue(value.Rotation.y);
+            writer.WriteValue(value.Rotation.z);
+            writer.WriteValue(value.Rotation.w);
+            writer.WriteEndArray();
+            writer.WritePropertyName("scale");
+            writer.WriteStartArray();
+            writer.WriteValue(value.Scale.x);
+            writer.WriteValue(value.Scale.y);
+            writer.WriteValue(value.Scale.z);
+            writer.WriteEndArray();
+            writer.WriteEndObject();
         }
     }
 }
