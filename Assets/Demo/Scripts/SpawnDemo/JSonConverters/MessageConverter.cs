@@ -42,7 +42,7 @@ namespace ClearScriptDemo.JSonConverters
         {
             return typeof(IJSMessage).IsAssignableFrom(objectType);
         }
-
+        
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer)
         {
@@ -52,11 +52,15 @@ namespace ClearScriptDemo.JSonConverters
 
             if (!MESSAGE_TYPE_BY_ID.ContainsKey(typeName!))
                 throw new JsonSerializationException("Unknown message: " + typeName);
-
+            
             var type = MESSAGE_TYPE_BY_ID[typeName];
-            if (data == null) return Activator.CreateInstance(type);
+            var result = Activator.CreateInstance(type);
+            if (data != null)
+            {
+                serializer.Populate(data.CreateReader(), result);
+            }
 
-            return data.ToObject(type, serializer);
+            return result;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using ClearScriptDemo.Demo.SpawnDemo;
 using ClearScriptDemo.JSonConverters;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -63,13 +61,9 @@ namespace Tests
                 }
             };
 
-            var expectedJson =
-                "{\"method\":\"entity_transform_update\",\"data\":{\"entityId\":123,\"transform\":{\"position\":[1.0,2.0,3.0],\"rotation\":[0.0,0.0,0.0,1.0],\"scale\":[2.0,2.0,2.0]}}}";
+            const string expectedJson = "{\"method\":\"entity_transform_update\",\"data\":{\"entityId\":123,\"transform\":{\"position\":[1.0,2.0,3.0],\"rotation\":[0.0,0.0,0.0,1.0],\"scale\":[2.0,2.0,2.0]}}}";
             
-            // Act
             var actualJson = JsonConvert.SerializeObject(message, new MessageConverter());
-
-            Debug.Log(actualJson);
             Assert.That(actualJson, Is.EqualTo(expectedJson));
         }
     }
