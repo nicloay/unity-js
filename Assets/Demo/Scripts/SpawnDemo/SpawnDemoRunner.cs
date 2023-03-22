@@ -3,21 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using ClearScriptDemo.Demo.Scripts.SpawnDemo.Components;
-using ClearScriptDemo.Demo.SpawnDemo;
-using ClearScriptDemo.JSonConverters;
+using ClearScriptDemo.Demo.SpawnDemo.Components;
+using ClearScriptDemo.Demo.SpawnDemo.Utils;
 using JSContainer;
-using Microsoft.ClearScript.JavaScript;
-using Newtonsoft.Json;
 using UnityEngine;
 
-namespace ClearScriptDemo.SpawnDemo
+namespace ClearScriptDemo.Demo.SpawnDemo
 {
     public class SpawnDemoRunner : MonoBehaviour
     {
         private const string JS_FILE_NAME = "spawn-demo.js";
         private readonly MessageQueue _messageQueue = new();
-        private readonly MessageConverter _converter = new();
+
         private Dictionary<int, GameObject> _entitiesById = new();
         private dynamic _module;
         private JSSandbox _sandbox;
@@ -41,7 +38,7 @@ namespace ClearScriptDemo.SpawnDemo
         {
             foreach (var message in messages)
             {
-                var data = JsonConvert.DeserializeObject<IMessage>((string)message, _converter);
+                var data = ((string)message).ToMessage();
                 MessageHandler.HandleMessage(data);
             }
 

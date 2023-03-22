@@ -2,7 +2,7 @@ using System.IO;
 using JSContainer;
 using UnityEngine;
 
-namespace ClearScriptDemo
+namespace ClearScriptDemo.Demo
 {
     /// <summary>
     ///     This Demo call JS method from Update loop with parameters

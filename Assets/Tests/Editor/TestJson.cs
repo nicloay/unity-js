@@ -45,7 +45,7 @@ namespace Tests
 
             Assert.That(actualJson, Is.EqualTo(expectedJson));
         }
-        
+
         [Test]
         public void Serialize_EntityTransformUpdateMessage_ReturnsExpectedJson()
         {
@@ -61,8 +61,9 @@ namespace Tests
                 }
             };
 
-            const string expectedJson = "{\"method\":\"entity_transform_update\",\"data\":{\"entityId\":123,\"transform\":{\"position\":[1.0,2.0,3.0],\"rotation\":[0.0,0.0,0.0,1.0],\"scale\":[2.0,2.0,2.0]}}}";
-            
+            const string expectedJson =
+                "{\"method\":\"entity_transform_update\",\"data\":{\"entityId\":123,\"transform\":{\"position\":[1.0,2.0,3.0],\"rotation\":[0.0,0.0,0.0,1.0],\"scale\":[2.0,2.0,2.0]}}}";
+
             var actualJson = JsonConvert.SerializeObject(message, new MessageConverter());
             Assert.That(actualJson, Is.EqualTo(expectedJson));
         }

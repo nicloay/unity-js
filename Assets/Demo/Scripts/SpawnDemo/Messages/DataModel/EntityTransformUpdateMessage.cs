@@ -1,5 +1,4 @@
-﻿using ClearScriptDemo.SpawnDemo;
-using UnityEngine;
+﻿using ClearScriptDemo.Demo.SpawnDemo.Utils;
 
 namespace ClearScriptDemo.Demo.SpawnDemo
 {
@@ -9,7 +8,7 @@ namespace ClearScriptDemo.Demo.SpawnDemo
         public int EntityId { get; set; }
         public TransformData Transform { get; set; }
     }
-    
+
     public static class EntityTransformUpdateHandler
     {
         public static void Handle(this EntityTransformUpdateMessage message)

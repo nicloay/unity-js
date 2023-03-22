@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 // ReSharper disable InconsistentNaming
-
 namespace JSContainer.Interop
 {
     [InteropModule("console", true)]

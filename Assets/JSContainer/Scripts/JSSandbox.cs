@@ -33,14 +33,20 @@ namespace JSContainer
         }
 
         /// <summary>
-        /// 
         /// </summary>
-        /// <param name="moduleOverrides">you can override any common modules with custom impelementation e.g. ~engine could lead to typeof(HelloWorld.cs) new type</param>
-        /// <param name="objectsOverride">you can override common module with instance, which will receive all messages instead of original claas</param>
-        public JSSandbox(IReadOnlyDictionary<string, Type> moduleOverrides = null, IReadOnlyDictionary<string, object> objectsOverride = null)
+        /// <param name="moduleOverrides">
+        ///     you can override any common modules with custom impelementation e.g. ~engine could lead
+        ///     to typeof(HelloWorld.cs) new type
+        /// </param>
+        /// <param name="objectsOverride">
+        ///     you can override common module with instance, which will receive all messages instead of
+        ///     original claas
+        /// </param>
+        public JSSandbox(IReadOnlyDictionary<string, Type> moduleOverrides = null,
+            IReadOnlyDictionary<string, object> objectsOverride = null)
         {
             _engine = new V8ScriptEngine(V8ScriptEngineFlags.EnableTaskPromiseConversion);
-            
+
             // 1. Add internal method
             _engine.Script.JSContainerLazyLoadModule = new Func<string, object>(LazyLoadModule);
 
@@ -54,23 +60,25 @@ namespace JSContainer
 
             // 4. Load Custom Interop Objects which can be used as CommonJS modules
             _engine.DocumentSettings.AccessFlags = DocumentAccessFlags.EnableFileLoading;
-            _ioModulesByName =  LoadIOModules(); // FUTURE_TASK: it's possible to reuse the same list for multiple containers
+            _ioModulesByName =
+                LoadIOModules(); // FUTURE_TASK: it's possible to reuse the same list for multiple containers
             var modules = _ioModulesByName;
-            if (moduleOverrides != null)
-            {
-                modules = ApplyOverrides(_ioModulesByName, moduleOverrides);
-            }
-            if (objectsOverride != null)
-            {
-                modules = ExcludeObjectOverrides(modules, objectsOverride);
-            }
+            if (moduleOverrides != null) modules = ApplyOverrides(_ioModulesByName, moduleOverrides);
+            if (objectsOverride != null) modules = ExcludeObjectOverrides(modules, objectsOverride);
             foreach (var keyValuePair in modules) Include(keyValuePair.Key);
             AddInstancesToCache(objectsOverride);
         }
 
-        private void AddInstancesToCache(IReadOnlyDictionary<string,object> objectsOverride)
+        public dynamic Script => _engine.Script;
+
+        public void Dispose()
         {
-            if (objectsOverride == null) 
+            _engine?.Dispose();
+        }
+
+        private void AddInstancesToCache(IReadOnlyDictionary<string, object> objectsOverride)
+        {
+            if (objectsOverride == null)
                 return;
             foreach (var keyValuePair in objectsOverride)
             {
@@ -79,7 +87,8 @@ namespace JSContainer
             }
         }
 
-        private IReadOnlyDictionary<string, Type> ExcludeObjectOverrides(IReadOnlyDictionary<string, Type> modules, IReadOnlyDictionary<string, object> objectsOverride)
+        private IReadOnlyDictionary<string, Type> ExcludeObjectOverrides(IReadOnlyDictionary<string, Type> modules,
+            IReadOnlyDictionary<string, object> objectsOverride)
         {
             return modules.Where(pair => !objectsOverride.ContainsKey(pair.Key))
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
@@ -88,22 +97,12 @@ namespace JSContainer
         private IReadOnlyDictionary<string, Type> ApplyOverrides(IReadOnlyDictionary<string, Type> baseMap,
             IReadOnlyDictionary<string, Type> overrides)
         {
-            if (overrides == null || overrides.Count == 0)
-            {
-                return baseMap;
-            }
-            
+            if (overrides == null || overrides.Count == 0) return baseMap;
+
             return baseMap.Select(pair =>
                 overrides.ContainsKey(pair.Key)
                     ? new KeyValuePair<string, Type>(pair.Key, overrides[pair.Key])
                     : pair).ToDictionary(pair => pair.Key, pair => pair.Value);
-        } 
-
-        public dynamic Script => _engine.Script;
-
-        public void Dispose()
-        {
-            _engine?.Dispose();
         }
 
         /// <summary>
@@ -131,7 +130,7 @@ namespace JSContainer
             {
                 var instance = Activator.CreateInstance(_ioModulesByName[itemName]);
                 _globalModuleInstances.Add(itemName, instance);
-            }  
+            }
 
             return _globalModuleInstances[itemName];
         }

@@ -1,7 +1,6 @@
-﻿using ClearScriptDemo.Demo.SpawnDemo;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace ClearScriptDemo.Demo.Scripts.SpawnDemo.Components
+namespace ClearScriptDemo.Demo.SpawnDemo.Components
 {
     /// <summary>
     ///     Listen key input, and forward key button press/release to the message queue

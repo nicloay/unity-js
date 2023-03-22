@@ -12,7 +12,7 @@ using UnityEngine.TestTools;
 namespace Tests
 {
     /// <summary>
-    /// Template which demonstrate how to use JSSandbox with unit tests
+    ///     Template which demonstrate how to use JSSandbox with unit tests
     /// </summary>
     public class JSContainerTest
     {

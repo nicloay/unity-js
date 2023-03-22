@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 
-namespace ClearScriptDemo.Demo.Scripts.SpawnDemo.Components
+namespace ClearScriptDemo.Demo.SpawnDemo.Components
 {
+    /// <summary>
+    ///     This component call onUpdate on javascript module provided by Instantiate method
+    /// </summary>
     public class CallModuleUpdate : MonoBehaviour
     {
         private dynamic _receiverModule;

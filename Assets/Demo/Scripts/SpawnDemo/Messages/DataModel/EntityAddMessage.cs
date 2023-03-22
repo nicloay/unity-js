@@ -1,8 +1,10 @@
-﻿using ClearScriptDemo.SpawnDemo;
+﻿using ClearScriptDemo.Demo.SpawnDemo.Utils;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace ClearScriptDemo.Demo.SpawnDemo
 {
+    [UsedImplicitly]
     [MessageId("entity_add")]
     public class EntityAddMessage : IMessage
     {
