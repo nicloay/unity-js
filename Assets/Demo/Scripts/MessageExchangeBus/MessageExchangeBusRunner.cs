@@ -12,7 +12,7 @@ namespace ClearScriptDemo.Demo.MessageExchangeBus
 {
     public class MessageExchangeBusRunner : MonoBehaviour
     {
-        private const string JS_FILE_NAME = "spawn-demo.js";
+        private const string JS_FILE_NAME = "message-exchange-bus-demo.js";
         private readonly MessageHandler _messageHandler = new();
         private readonly MessageQueue _messageQueue = new();
 
