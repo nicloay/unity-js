@@ -21,7 +21,7 @@ namespace EditorTests
             Assert.That(data[1], Is.TypeOf<EntityTransformUpdateMessage>());
 
             var first = (EntityAddMessage)data[0];
-            Assert.That(first.Id, Is.EqualTo(21));
+            Assert.That(first.EntityId, Is.EqualTo(21));
 
             var second = (EntityTransformUpdateMessage)data[1];
             Assert.That(second.Transform.Position.x, Is.EqualTo(1.3).Within(0.000001f));

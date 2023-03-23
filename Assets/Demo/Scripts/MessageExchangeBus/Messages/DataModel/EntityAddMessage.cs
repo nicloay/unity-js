@@ -8,14 +8,14 @@ namespace ClearScriptDemo.Demo.MessageExchangeBus
     [MessageId("entity_add")]
     public class EntityAddMessage : IMessage
     {
-        public int Id { get; set; }
+        public int EntityId { get; set; }
     }
 
     public static class AddMessageHandler
     {
         public static void Handle(this EntityAddMessage message, EntityManager entityManager)
         {
-            entityManager.InstantiatePrimitive(message.Id, PrimitiveType.Cube);
+            entityManager.InstantiatePrimitive(message.EntityId, PrimitiveType.Cube);
         }
     }
 }

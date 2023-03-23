@@ -10,14 +10,12 @@ const outgoing = []
 
 async function sendReceive() {
   // Exchange serialized messages
-  var result = await engine.sendMessages(outgoing.map(encode))
+  var result = await engine.sendMessages(outgoing.map(encode)) // FIX - we have to be more descriptive here what we wait and what we map 
   const newIncoming = result.map(decode)
   
   // Place incoming messages in the queue, and clear the outgoing messages we just sent:
-  // incoming = incoming.concat(newIncoming)
-
-  incoming.push(...newIncoming);
-  outgoing.length = 0;
+  incoming.push(...newIncoming); // FIX: we can't use concat as incoming is constant. 
+  outgoing.length = 0; // FIX: as outgoing is const, we can't assign [] in to it
 }
 
 // The known ID of the only Entity in this example:
@@ -27,13 +25,13 @@ let scaleY = 0
 let isSpaceBarPressed = 0
 
 module.exports.onStart = async function() {
-  outgoing.push({ 
-    method: "entity_add", 
-    data: { id: cubeId }
+  outgoing.push({
+    method: "entity_add",
+    data: { entityId: cubeId } // FIX: change from id, to be more consistent
   })
 
   outgoing.push({
-    method: "entity_transform_update", 
+    method: "entity_transform_update",
     data: {
       entityId: cubeId,
       transform: {
@@ -48,7 +46,6 @@ module.exports.onStart = async function() {
 }
 
 module.exports.onUpdate = async function(dt) {
-  
   // Process incoming messages:
   for (msg of incoming) {
     if (msg.method === "key_down" && msg.data.key === "space") {
@@ -59,7 +56,7 @@ module.exports.onUpdate = async function(dt) {
     }
   }
   // Clear queue
-  incoming.length = [];
+  incoming.length = []; // FIX replace with .length, as we can't assign [] to the const
   /**
    * Pressing the space bar makes the cube grow bigger.
    * If it's released, it shrinks back to its original size.
@@ -76,12 +73,12 @@ module.exports.onUpdate = async function(dt) {
 
   // Queue outgoing messages:
   outgoing.push({
-    method: "entity_transform_update", 
+    method: "entity_transform_update",
     data: {
       entityId: cubeId,
       transform: {
         position: [0, 0, 0],
-        rotation: [Math.sin(rotationX), 0, 0, Math.cos(rotationX)],
+        rotation: [Math.sin(rotationX), 0, 0, Math.cos(rotationX)], // FIX - this vector looks like quaternion so to rotate around X we have to use sin/cos
         scale: [1, scaleY, 1]
       }
     }
