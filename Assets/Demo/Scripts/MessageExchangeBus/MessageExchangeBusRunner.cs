@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using ClearScriptDemo.Demo.SpawnDemo.Components;
-using ClearScriptDemo.Demo.SpawnDemo.Utils;
+using ClearScriptDemo.Demo.MessageExchangeBus.Components;
+using ClearScriptDemo.Demo.MessageExchangeBus.Utils;
 using JSContainer;
 using UnityEngine;
 
-namespace ClearScriptDemo.Demo.SpawnDemo
+namespace ClearScriptDemo.Demo.MessageExchangeBus
 {
-    public class SpawnDemoRunner : MonoBehaviour
+    public class MessageExchangeBusRunner : MonoBehaviour
     {
         private const string JS_FILE_NAME = "spawn-demo.js";
         private readonly MessageHandler _messageHandler = new();
@@ -30,7 +30,7 @@ namespace ClearScriptDemo.Demo.SpawnDemo
         {
             await _module.onStart();
             var o = gameObject;
-            CallModuleUpdate.Instantiate(o, _module);
+            CallModuleUpdateTrigger.Instantiate(o, _module);
             KeyDownUpInputDispatcher.Instantiate(o, _messageQueue);
         }
 

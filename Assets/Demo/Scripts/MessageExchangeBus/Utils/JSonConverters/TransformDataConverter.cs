@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
-namespace ClearScriptDemo.Demo.SpawnDemo.Utils.JSonConverters
+namespace ClearScriptDemo.Demo.MessageExchangeBus.Utils
 {
     public class TransformDataConverter : JsonConverter<TransformData>
     {

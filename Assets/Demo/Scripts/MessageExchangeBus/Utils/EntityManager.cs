@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace ClearScriptDemo.Demo.SpawnDemo.Utils
+namespace ClearScriptDemo.Demo.MessageExchangeBus.Utils
 {
     /// <summary>
     ///     This manager instantiates instances of a prefab on the scene with a specified ID,

@@ -1,7 +1,7 @@
 ﻿using System;
-using ClearScriptDemo.Demo.SpawnDemo.Utils;
+using ClearScriptDemo.Demo.MessageExchangeBus.Utils;
 
-namespace ClearScriptDemo.Demo.SpawnDemo
+namespace ClearScriptDemo.Demo.MessageExchangeBus
 {
     public class MessageHandler
     {

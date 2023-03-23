@@ -1,8 +1,8 @@
-﻿using ClearScriptDemo.Demo.SpawnDemo.Utils.JSonConverters;
+﻿using ClearScriptDemo.Demo.MessageExchangeBus.Utils;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace ClearScriptDemo.Demo.SpawnDemo
+namespace ClearScriptDemo.Demo.MessageExchangeBus
 {
     [JsonConverter(typeof(TransformDataConverter))]
     public class TransformData

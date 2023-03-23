@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using ClearScriptDemo.Demo.SpawnDemo;
-using ClearScriptDemo.Demo.SpawnDemo.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
-// ReSharper disable once CheckNamespace
-namespace ClearScriptDemo.JSonConverters
+namespace ClearScriptDemo.Demo.MessageExchangeBus.Utils
 {
     public class MessageConverter : JsonConverter
     {

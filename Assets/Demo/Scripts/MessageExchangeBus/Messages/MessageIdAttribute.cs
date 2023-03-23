@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ClearScriptDemo.Demo.SpawnDemo
+namespace ClearScriptDemo.Demo.MessageExchangeBus
 {
     public class MessageIdAttribute : Attribute
     {

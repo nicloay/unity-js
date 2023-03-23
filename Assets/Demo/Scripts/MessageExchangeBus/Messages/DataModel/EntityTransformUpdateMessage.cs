@@ -1,6 +1,6 @@
-﻿using ClearScriptDemo.Demo.SpawnDemo.Utils;
+﻿using ClearScriptDemo.Demo.MessageExchangeBus.Utils;
 
-namespace ClearScriptDemo.Demo.SpawnDemo
+namespace ClearScriptDemo.Demo.MessageExchangeBus
 {
     [MessageId("entity_transform_update")]
     public class EntityTransformUpdateMessage : IMessage

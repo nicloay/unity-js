@@ -1,4 +1,4 @@
-﻿namespace ClearScriptDemo.Demo.SpawnDemo
+﻿namespace ClearScriptDemo.Demo.MessageExchangeBus
 {
     [MessageId("key_up")]
     public class KeyUpMessage : IMessage

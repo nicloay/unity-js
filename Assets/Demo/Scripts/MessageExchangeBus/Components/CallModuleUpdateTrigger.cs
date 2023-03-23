@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-namespace ClearScriptDemo.Demo.SpawnDemo.Components
+namespace ClearScriptDemo.Demo.MessageExchangeBus.Components
 {
     /// <summary>
     ///     This component call onUpdate on javascript module provided by Instantiate method
     /// </summary>
-    public class CallModuleUpdate : MonoBehaviour
+    public class CallModuleUpdateTrigger : MonoBehaviour
     {
         private dynamic _receiverModule;
 
@@ -14,9 +14,9 @@ namespace ClearScriptDemo.Demo.SpawnDemo.Components
             _receiverModule.onUpdate(Time.deltaTime);
         }
 
-        public static CallModuleUpdate Instantiate(GameObject host, dynamic receiverModule)
+        public static CallModuleUpdateTrigger Instantiate(GameObject host, dynamic receiverModule)
         {
-            var instance = host.AddComponent<CallModuleUpdate>();
+            var instance = host.AddComponent<CallModuleUpdateTrigger>();
             instance._receiverModule = receiverModule;
             return instance;
         }

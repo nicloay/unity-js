@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ClearScriptDemo.Demo.SpawnDemo.Utils;
+using ClearScriptDemo.Demo.MessageExchangeBus.Utils;
 
-namespace ClearScriptDemo.Demo.SpawnDemo
+namespace ClearScriptDemo.Demo.MessageExchangeBus
 {
     /// <summary>
     ///     Message accumulator,

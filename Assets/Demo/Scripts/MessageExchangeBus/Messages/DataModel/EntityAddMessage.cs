@@ -1,8 +1,8 @@
-﻿using ClearScriptDemo.Demo.SpawnDemo.Utils;
+﻿using ClearScriptDemo.Demo.MessageExchangeBus.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace ClearScriptDemo.Demo.SpawnDemo
+namespace ClearScriptDemo.Demo.MessageExchangeBus
 {
     [UsedImplicitly]
     [MessageId("entity_add")]

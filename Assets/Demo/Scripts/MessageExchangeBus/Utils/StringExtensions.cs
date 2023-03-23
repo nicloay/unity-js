@@ -1,7 +1,6 @@
-﻿using ClearScriptDemo.JSonConverters;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace ClearScriptDemo.Demo.SpawnDemo.Utils
+namespace ClearScriptDemo.Demo.MessageExchangeBus.Utils
 {
     public static class StringExtensions
     {

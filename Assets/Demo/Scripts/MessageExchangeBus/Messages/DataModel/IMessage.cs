@@ -1,4 +1,4 @@
-﻿namespace ClearScriptDemo.Demo.SpawnDemo
+﻿namespace ClearScriptDemo.Demo.MessageExchangeBus
 {
     /// <summary>
     ///     protocol used by JS and .NET for message exchange
