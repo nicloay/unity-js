@@ -6,7 +6,11 @@ namespace ClearScriptDemo.Demo.MessageExchangeBus
     public class MessageHandler
     {
         private readonly EntityManager _entityManager = new();
-
+        
+        /// <summary>
+        /// Single entry point to manage all IMessages,
+        /// You should add another method here if you add new IMessage types which comes from JS to Unity. 
+        /// </summary>
         public void HandleMessage(IMessage message)
         {
             switch (message)

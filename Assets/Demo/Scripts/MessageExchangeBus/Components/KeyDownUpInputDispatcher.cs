@@ -24,6 +24,7 @@ namespace ClearScriptDemo.Demo.MessageExchangeBus.Components
             }
         }
 
+        // Factory method which will create instance on the host object
         public static void Instantiate(GameObject parentObject, MessageQueue queue)
         {
             var instance = parentObject.AddComponent<KeyDownUpInputDispatcher>();

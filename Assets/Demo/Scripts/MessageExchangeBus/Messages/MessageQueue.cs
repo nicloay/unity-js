@@ -7,7 +7,7 @@ namespace ClearScriptDemo.Demo.MessageExchangeBus
     /// <summary>
     ///     Message accumulator,
     ///     Used to collect messages from different component,
-    ///     Pop method return collected messages and clear internal cache
+    ///     Pop method return collected messages as json array (one json string per Message) and then clear internal cache
     /// </summary>
     public class MessageQueue
     {
@@ -18,7 +18,12 @@ namespace ClearScriptDemo.Demo.MessageExchangeBus
             _messages.Add(message);
         }
 
-        public string[] PopMessagesAsStringList()
+        /// <summary>
+        /// return array of json 
+        /// ["{...}","{...}"]
+        /// then clear _messages cache
+        /// </summary>
+        public string[] PopMessagesAsJsonArray()
         {
             var result = _messages.Select(message => message.ToJsonString()).ToArray();
             _messages.Clear();

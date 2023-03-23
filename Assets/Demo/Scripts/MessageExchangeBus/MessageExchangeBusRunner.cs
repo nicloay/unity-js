@@ -29,9 +29,9 @@ namespace ClearScriptDemo.Demo.MessageExchangeBus
         private async void Start()
         {
             await _module.onStart();
-            var o = gameObject;
-            CallModuleUpdateTrigger.Instantiate(o, _module);
-            KeyDownUpInputDispatcher.Instantiate(o, _messageQueue);
+            CallModuleUpdateTrigger.Instantiate(gameObject, _module); // this component will call update on the _module.
+            // ReSharper disable once Unity.InefficientPropertyAccess
+            KeyDownUpInputDispatcher.Instantiate(gameObject, _messageQueue); // this component will populate message queue with input messages when they occurs.
         }
 
         private void OnDestroy()
@@ -40,6 +40,9 @@ namespace ClearScriptDemo.Demo.MessageExchangeBus
         }
 
 #pragma warning disable CS1998
+        /// <summary>
+        /// All message exchange happens through this method. it receive list of IMessages and return another list of IMessages
+        /// </summary>
         // ReSharper disable once MemberCanBePrivate.Global
         // ReSharper disable once InconsistentNaming
         public async Task<object> sendMessages(IList messages)
@@ -51,7 +54,7 @@ namespace ClearScriptDemo.Demo.MessageExchangeBus
                 _messageHandler.HandleMessage(data);
             }
 
-            return _sandbox.Script.Array.from(_messageQueue.PopMessagesAsStringList());
+            return _sandbox.Script.Array.from(_messageQueue.PopMessagesAsJsonArray());
         }
     }
 }

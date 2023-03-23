@@ -7,6 +7,18 @@ using UnityEngine;
 
 namespace ClearScriptDemo.Demo.MessageExchangeBus.Utils
 {
+    /// <summary>
+    /// Convert messages from json to specific objects.
+    /// messages comes as java script in the following format
+    /// <code>{
+    ///     "method":"MESSAGE_TYPE",
+    ///     "data": {
+    ///         ...
+    ///     }
+    /// }</code>
+    /// based on MESSAGE_TYPE corresponding type will be created <see cref="MessageIdAttribute"/> which establish link between this MESSAGE_TYPE and exact type
+    /// data object fields are serialized in to final result
+    /// </summary>
     public class MessageConverter : JsonConverter
     {
         private static readonly IReadOnlyDictionary<string, Type> MESSAGE_TYPE_BY_ID;

@@ -5,6 +5,15 @@ using UnityEngine;
 
 namespace ClearScriptDemo.Demo.MessageExchangeBus.Utils
 {
+    /// <summary>
+    /// convert javascript transform in to TransformData
+    /// incoming json has following format
+    /// <code>{"transform": {
+    ///    "position": [x, y, z],
+    ///    "rotation": [x, y, z, w],
+    ///    "scale": [x, y, z]
+    ///  }}</code>
+    /// </summary>
     public class TransformDataConverter : JsonConverter<TransformData>
     {
         public override bool CanWrite => true;
