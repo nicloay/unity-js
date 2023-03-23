@@ -123,7 +123,7 @@ This example demonstrate how to pass messages from JS to NET and back.
 Upon starting the demo scene, you will notice a rotated cube. 
 Pressing and holding the space bar will cause it to scale up, and releasing the key will scale it back down to its normal size.
 
-![image](https://user-images.githubusercontent.com/1671030/227162020-44a0d3e3-8847-4e23-a70d-d041ae4b28d1.png)
+![Animation](https://user-images.githubusercontent.com/1671030/227182506-fc2ece81-b48d-43bc-b05a-7594f7efaf69.gif)
 
 In case if you want to add functionality you should
 1. Create new message which implement IMessage interface and has [MessageIdAttribute] on it
