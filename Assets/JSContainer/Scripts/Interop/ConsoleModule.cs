@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
 // ReSharper disable InconsistentNaming
-
 namespace JSContainer.Interop
 {
     [InteropModule("console", true)]

@@ -5,10 +5,10 @@ using Cysharp.Threading.Tasks;
 using JSContainer;
 using UnityEngine;
 
-namespace ClearScriptDemo
+namespace ClearScriptDemo.Demo
 {
     /// <summary>
-    ///     Demonstrate how code from JS Sandbox send Debug.Draw line every frame 
+    ///     Demonstrate how code from JS Sandbox send Debug.Draw line every frame
     /// </summary>
     public class AsyncDemoRunner : MonoBehaviour
     {

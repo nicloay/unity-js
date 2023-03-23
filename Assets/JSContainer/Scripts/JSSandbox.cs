@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using JetBrains.Annotations;
 using JSContainer.Interop;
 using Microsoft.ClearScript;
@@ -15,9 +16,9 @@ namespace JSContainer
     /// </summary>
     public class JSSandbox : IDisposable
     {
-        private static readonly Type InteropAttribute = typeof(InteropModule);
+        private static readonly Type INTEROP_ATTRIBUTE = typeof(InteropModule);
 
-        private static readonly HashSet<Type> ExposedTypes = new()
+        private static readonly HashSet<Type> EXPOSED_TYPES = new()
         {
             typeof(Vector3), typeof(Color)
         };
@@ -31,7 +32,18 @@ namespace JSContainer
             V8Settings.GlobalFlags |= V8GlobalFlags.DisableBackgroundWork;
         }
 
-        public JSSandbox()
+        /// <summary>
+        /// </summary>
+        /// <param name="moduleOverrides">
+        ///     you can override any common modules with custom impelementation e.g. ~engine could lead
+        ///     to typeof(HelloWorld.cs) new type
+        /// </param>
+        /// <param name="objectsOverride">
+        ///     you can override common module with instance, which will receive all messages instead of
+        ///     original claas
+        /// </param>
+        public JSSandbox(IReadOnlyDictionary<string, Type> moduleOverrides = null,
+            IReadOnlyDictionary<string, object> objectsOverride = null)
         {
             _engine = new V8ScriptEngine(V8ScriptEngineFlags.EnableTaskPromiseConversion);
 
@@ -43,14 +55,18 @@ namespace JSContainer
 
             // 2. Expose UnityEngine types see ExposedTypes
             var collection = new HostTypeCollection();
-            collection.AddAssembly(typeof(Vector3).Assembly, ExposedTypes.Contains);
+            collection.AddAssembly(typeof(Vector3).Assembly, EXPOSED_TYPES.Contains);
             _engine.AddHostObject("unity", collection);
 
             // 4. Load Custom Interop Objects which can be used as CommonJS modules
             _engine.DocumentSettings.AccessFlags = DocumentAccessFlags.EnableFileLoading;
             _ioModulesByName =
                 LoadIOModules(); // FUTURE_TASK: it's possible to reuse the same list for multiple containers
-            foreach (var keyValuePair in _ioModulesByName) Include(keyValuePair.Key);
+            var modules = _ioModulesByName;
+            if (moduleOverrides != null) modules = ApplyOverrides(_ioModulesByName, moduleOverrides);
+            if (objectsOverride != null) modules = ExcludeObjectOverrides(modules, objectsOverride);
+            foreach (var keyValuePair in modules) Include(keyValuePair.Key);
+            AddInstancesToCache(objectsOverride);
         }
 
         public dynamic Script => _engine.Script;
@@ -58,6 +74,35 @@ namespace JSContainer
         public void Dispose()
         {
             _engine?.Dispose();
+        }
+
+        private void AddInstancesToCache(IReadOnlyDictionary<string, object> objectsOverride)
+        {
+            if (objectsOverride == null)
+                return;
+            foreach (var keyValuePair in objectsOverride)
+            {
+                _globalModuleInstances.Add(keyValuePair.Key, keyValuePair.Value);
+                Include(keyValuePair.Key);
+            }
+        }
+
+        private IReadOnlyDictionary<string, Type> ExcludeObjectOverrides(IReadOnlyDictionary<string, Type> modules,
+            IReadOnlyDictionary<string, object> objectsOverride)
+        {
+            return modules.Where(pair => !objectsOverride.ContainsKey(pair.Key))
+                .ToDictionary(pair => pair.Key, pair => pair.Value);
+        }
+
+        private IReadOnlyDictionary<string, Type> ApplyOverrides(IReadOnlyDictionary<string, Type> baseMap,
+            IReadOnlyDictionary<string, Type> overrides)
+        {
+            if (overrides == null || overrides.Count == 0) return baseMap;
+
+            return baseMap.Select(pair =>
+                overrides.ContainsKey(pair.Key)
+                    ? new KeyValuePair<string, Type>(pair.Key, overrides[pair.Key])
+                    : pair).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
 
         /// <summary>
@@ -95,13 +140,13 @@ namespace JSContainer
             var result = new Dictionary<string, Type>();
             var assembly = typeof(InteropModule).Assembly;
             foreach (var type in assembly.GetTypes())
-                if (Attribute.IsDefined(type, InteropAttribute))
+                if (Attribute.IsDefined(type, INTEROP_ATTRIBUTE))
                 {
-                    var attribute = (InteropModule)Attribute.GetCustomAttribute(type, InteropAttribute);
-                    if (result.ContainsKey(attribute.ItemName))
+                    var attribute = (InteropModule)Attribute.GetCustomAttribute(type, INTEROP_ATTRIBUTE);
+                    if (result.TryGetValue(attribute.ItemName, out var value))
                     {
                         Debug.LogError($"problem with multiple module with the same itemName: {attribute.ItemName} " +
-                                       $"types: {result[attribute.ItemName]}, {type}");
+                                       $"types: {value}, {type}");
                         throw new Exception();
                     }
 

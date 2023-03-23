@@ -55,7 +55,7 @@ currently using version 7.4.0. If you wish to update to the latest version, you 
 4. Unitask is added as an external package through the package manager to allow the use of UniTask.DelayFrame. If you don't need it, you can skip this step.
 
 # Usage
-## SimpleDemo scene
+## Simple Demo scene
 
 Open the SimpleDemo scene to see how SimpleDemoRunner.cs component is utilized to run simple-demo.js file. 
 Take note of how you can create a sandbox and call methods on JavaScript, 
@@ -83,7 +83,7 @@ module.exports.onStart = async function() {
 }
 ```
 
-## AsyncDemoRunner
+## Async Demo Runner
 Here you can see how JavaScript waits one frame and then utilizes Unity's Debug.DrawLine API. The frame waiting is implemented using UniTask.DelayFrame in a fast and efficient manner.
 
 Don't forget to enable gizmos in the editor so that you can see the spinning lines.
@@ -100,7 +100,35 @@ module.exports.debugDrawLine = async function () {
 }
 ```
 and this is what you will se in Editor
+
 ![image](https://user-images.githubusercontent.com/1671030/224580822-5826b29c-7f46-4e9d-b8df-a88f1e528628.png)
+
+## Message Exchange Bus
+This example demonstrate how to pass messages from JS to NET and back. 
+* Unity 
+  * The **onStart** function is triggered once when the engine initializes.
+  * The **onUpdate** function is triggered at every frame in JS module.
+  * Unity listens to the input and fills the message queue with KeyDown and KeyUp messages.
+* JS
+  * When onStart is triggered, a message is sent to Unity to spawn a cube.
+  * When onUpdate is triggered, the following happens:
+    * Messages are received from Unity about input and used to modify the scale of the object.
+    * Messages are sent back to Unity with transform changes that need to be applied to the spawned cube.
+
+> **Warning** Please note that there are certain areas that could be optimized in the implementation. 
+> For example, in the IMessage JSON serialization phase, 
+> it is possible to avoid this step by passing references to the objects using ClearScript, 
+> which allows for sharing of the array itself instead of going through the process of JSON conversion.
+
+Upon starting the demo scene, you will notice a rotated cube. 
+Pressing and holding the space bar will cause it to scale up, and releasing the key will scale it back down to its normal size.
+
+![Animation](https://user-images.githubusercontent.com/1671030/227182506-fc2ece81-b48d-43bc-b05a-7594f7efaf69.gif)
+
+In case if you want to add functionality you should
+1. Create new message which implement IMessage interface and has [MessageIdAttribute] on it
+2. If you want to handle specific message on Unity side please see MessageHandler, what it does is only call static methods according to incoming messages. You can keep these handlers anywhere, but in the project they are in the same file as message itself. see for example EntityAddMessage.cs
+3. If you have new data type and want to continue use JSON serialization phase, you should write custom converter. See for example TransformDataConverter.cs. And offcourse better to verify functionality with UnitTests, see TestJson.cs
 
 # Best Practices for Using the Library
 

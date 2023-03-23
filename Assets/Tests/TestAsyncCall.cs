@@ -9,10 +9,10 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace RuntimeTests
 {
     /// <summary>
-    /// Template which demonstrate how to use JSSandbox with unit tests
+    ///     Template which demonstrate how to use JSSandbox with unit tests
     /// </summary>
     public class JSContainerTest
     {

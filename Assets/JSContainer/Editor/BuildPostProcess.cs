@@ -3,7 +3,7 @@ using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-namespace ClearScriptUnityDemo.JSContainer
+namespace JSContainer.Editor
 {
     /// <summary>
     ///     Clear Script require V8 native library to be present in the target folder at proper location
